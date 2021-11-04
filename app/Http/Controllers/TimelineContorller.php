@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\status;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TimelineContorller extends Controller
 {
@@ -15,6 +17,9 @@ class TimelineContorller extends Controller
     public function __invoke(Request $request)
     {
         //
-        return view('content.timeline');
+
+        $statuses = status::where('user_id',Auth::user()->id)->get();
+        // dd($statuses);
+        return view('content.timeline',compact('statuses'));
     }
 }
