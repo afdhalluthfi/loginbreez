@@ -17,9 +17,14 @@ class TimelineContorller extends Controller
     public function __invoke(Request $request)
     {
         //
-
-        $statuses = status::where('user_id',Auth::user()->id)->get();
+        // $following =Auth::user()->follower->pluck('id');
+        // $statuses = status::whereIn('user_id',$following)
+        //                                         ->orWhere('user_id',Auth::user()->id)
+        //                                         ->latest()
+        //                                         ->get();
         // dd($statuses);
+        $statuses=Auth::user()->timeline();
+        
         return view('content.timeline',compact('statuses'));
     }
 }

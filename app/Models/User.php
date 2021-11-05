@@ -42,6 +42,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function timeline () {
+        $following =$this->follower->pluck('id');
+        return status::whereIn('user_id',$following)
+                                                ->orWhere('user_id',$this->id)
+                                                ->latest()
+                                                ->get();
+    }
+
     public function status()
     {
         return $this->hasMany(status::class);

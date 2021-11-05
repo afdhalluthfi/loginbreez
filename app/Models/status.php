@@ -9,6 +9,8 @@ class status extends Model
 {
     use HasFactory;
 
+    protected $fillable=['body','identyfier'];
+
 
     public function user () {
         return $this->belongsTo(User::class);
