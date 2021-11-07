@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StatusesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TimelineContorller;
 /*
@@ -17,6 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::view('/dashboard','dashboard')->middleware(['auth'])->name('dashboard');
-Route::get( 'timeline', TimelineContorller::class)->middleware(['auth'])->name('timeline');
+
+Route::middleware(['auth'])->group(function () {
+    Route::view('/dashboard','dashboard')->middleware(['auth'])->name('dashboard');
+    Route::get( 'timeline', TimelineContorller::class)->name('timeline');
+    Route::post('status',[StatusesController::class,'store'])->name('status.store');
+});
 require __DIR__.'/auth.php';

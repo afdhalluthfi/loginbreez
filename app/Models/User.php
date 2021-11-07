@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -49,21 +50,34 @@ class User extends Authenticatable
                                                 ->latest()
                                                 ->get();
     }
-
     public function status()
     {
         return $this->hasMany(status::class);
     }
 
+    public function insertBody($string)
+    {
+        $this->status()->create([
+            'body'=>$string,
+            'identyfier'=>Str::slug(Str::random(31).$this->id)
+        ]);
+    }
 
-    public function follower () {
+    public function follower () 
+    {
         return $this->belongsToMany(User::class,'follow','user_id','follow_user_id')->withTimestamps();
     }
 
 
-    // helper follow
+    // helper
 
-    public function following (User $user) {
+    public function following (User $user) 
+    {
         return $this->follower()->save($user);
+    }
+    public function gravatar ($size =100) 
+    {   $default='mm';
+        $grav_url = "https://www.gravatar.com/avatar/" . md5(strtolower(trim($this->email))) . "?d=" . urlencode($default) . "&s=" . $size;
+        return $grav_url;
     }
 }
